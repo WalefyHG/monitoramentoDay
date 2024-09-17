@@ -79,6 +79,20 @@ class HabitService extends ChangeNotifier {
     notifyListeners();
   }
 
+  double calculationPorcentage(String frequency){
+    final totalHabits = habits.length;
+    final completedHabits = habits.where((habit) => habit.isComplete).length;
+    if(frequency == 'Diário'){
+      return completedHabits / totalHabits;
+    } else if(frequency == 'Semanal'){
+      return completedHabits / (totalHabits * 7);
+    } else {
+      return completedHabits / (totalHabits * 30);
+    }
+  }
+
+
+
   @override
   Future<void> notifyListeners() async {
     super.notifyListeners();

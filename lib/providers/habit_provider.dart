@@ -145,5 +145,43 @@ class HabitNotifier extends StateNotifier<List<Habit>> {
     _prefs.remove(_habitsKey);
   }
   
+  double calculationPorcentage(String frequency){
+    if (state.isEmpty) return 0.0;
+
+    int completedHabits;
+    int totalHabits;
+
+    switch (frequency) {
+      case 'Semanal':
+        // Assume que todos os hábitos são relevantes para o cálculo semanal
+        completedHabits = state.where((habit) =>
+          habit.isComplete &&
+          habit.frequency == 'Semanal' // Considera a frequência semanal
+        ).length;
+        totalHabits = state.where((habit) =>
+          habit.frequency == 'Semanal'
+        ).length;
+        break;
+
+      case 'Mensal':
+        // Assume que todos os hábitos são relevantes para o cálculo mensal
+        completedHabits = state.where((habit) =>
+          habit.isComplete &&
+          habit.frequency == 'Mensal' // Considera a frequência mensal
+        ).length;
+        totalHabits = state.where((habit) =>
+          habit.frequency == 'Mensal'
+        ).length;
+        break;
+
+      default:
+        completedHabits = state.where((habit) => habit.isComplete).length;
+        totalHabits = state.length;
+    }
+
+    return totalHabits == 0 ? 0.0 : completedHabits / totalHabits;
+  }
+
+
 }
 

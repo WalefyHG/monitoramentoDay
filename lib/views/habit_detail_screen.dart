@@ -33,6 +33,12 @@ class HabitDetailScreen extends ConsumerWidget {
                 habit.description,
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
+              LinearProgressIndicator(
+                value: habitNotifier.calculationPorcentage("daily"),// Adiciona a barra de progresso
+                backgroundColor: Colors.grey[300],
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                minHeight: 10.0,
+              ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
