@@ -1,12 +1,12 @@
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:monitor_habitos/widgets/notifications.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../views/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await AndroidAlarmManager.initialize();
   await NotificationHelper().requestPermissions();
   runApp(ProviderScope(child: MyApp()));
 }

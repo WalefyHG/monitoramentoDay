@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:monitor_habitos/widgets/alarm_icon.dart';
 import '../providers/habit_provider.dart';
 import 'habit_form_screen.dart';
 import 'habit_detail_screen.dart';
@@ -45,9 +46,42 @@ class HomeScreen extends ConsumerWidget {
                   ),
                 ),
                 subtitle: Text(habit.description),
-                trailing: habit.isComplete
-                    ? const Icon(Icons.check_circle, color: Colors.green)
-                    : null, // Exibe um ícone se completo
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    habit.isComplete
+                        ? const Icon(
+                      Icons.check,
+                      color: Colors.green,
+                    )
+                        : const SizedBox(),
+                  AlarmIconWidget(hasAlarm: habit.hasAlarm),
+                  PopupMenuButton<String>(
+                    color: Colors.green,
+                    iconColor: Colors.white,
+                    onSelected: (value) async {
+                      if (value == 'setalarm') {
+                        final selectedTime = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.now(),
+                        );
+                        if (selectedTime != null) {
+                          ref.read(habitProvider.notifier).setAlarm(
+                            selectedTime,
+                            habit.id,
+                          );
+                        }
+                      }
+                    },
+                    itemBuilder: (context) => <PopupMenuEntry<String>>[
+                      const PopupMenuItem(
+                        value: 'setalarm',
+                        child: Text('Definir Alarme'),
+                      ),
+                    ],
+                  )
+                  ],
+                ),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(

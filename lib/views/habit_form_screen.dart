@@ -12,7 +12,24 @@ class HabitFormScreen extends ConsumerWidget {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
+  DateTime? _selectedDate;
   String _frequency = 'Diário';
+
+
+  Future<void> _selectedDatePicker(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate != null && pickedDate != _selectedDate) {
+      _selectedDate = pickedDate;
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -51,6 +68,7 @@ class HabitFormScreen extends ConsumerWidget {
                   decoration: const InputDecoration(labelText: 'Descrição'),
                   style: const TextStyle(color: Colors.green),
                 ),
+                const SizedBox(height: 20),
                 DropdownButtonFormField<String>(
                   value: _frequency,
                   items: ['Diário', 'Semanal', 'Mensal']
@@ -66,6 +84,26 @@ class HabitFormScreen extends ConsumerWidget {
                   style: const TextStyle(color: Colors.green),
                 ),
                 const SizedBox(height: 20),
+                GestureDetector(
+                  onTap: () => _selectedDatePicker(context),
+                  child: Container(
+                    height: 50,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.green),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: Text(
+                        _selectedDate == null
+                            ? 'Selecione uma data'
+                            : 'Data selecionada: ${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
+                        style: const TextStyle(color: Colors.green),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
@@ -75,6 +113,7 @@ class HabitFormScreen extends ConsumerWidget {
                         description: _descriptionController.text,
                         frequency: _frequency,
                         isComplete: habit?.isComplete ?? false,
+                        alarmTime: _selectedDate,
                       );
 
                       if (habit == null) {

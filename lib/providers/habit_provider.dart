@@ -80,12 +80,11 @@ class HabitNotifier extends StateNotifier<List<Habit>> {
     final now = DateTime.now();
     final alarmTime = DateTime(now.year, now.month, now.day, time.hour, time.minute);
     state = [
-      for (final h in state)
-        if (h.id == habitId) h.copyWith(alarmTime: alarmTime) else h
-    ];
+    for (final h in state)
+      if (h.id == habitId) h.copyWith(alarmTime: alarmTime, hasAlarm: true) else h
+  ];
 
-    habit.hasAlarm = true;
-
+    print("Alarm setado");
     saveHabits();
 
     if(habit.hasAlarm){
@@ -123,6 +122,7 @@ class HabitNotifier extends StateNotifier<List<Habit>> {
         body: habitObj.name,
         scheduledDate: habitObj.alarmTime!,
       );
+      print("notificado");
     }
   }
   

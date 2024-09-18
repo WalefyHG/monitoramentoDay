@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import '../providers/habit_provider.dart';
 import '../models/habit.dart';
 import 'habit_form_screen.dart';
@@ -26,13 +27,14 @@ class HabitDetailScreen extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Descrição:',
+                'Descrição: ' + habit.description,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               Text(
                 habit.description,
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
+              
               LinearProgressIndicator(
                 value: habitNotifier.calculationPorcentage("daily"),// Adiciona a barra de progresso
                 backgroundColor: Colors.grey[300],
@@ -40,6 +42,11 @@ class HabitDetailScreen extends ConsumerWidget {
                 minHeight: 10.0,
               ),
               const SizedBox(height: 20),
+              Text(
+                DateFormat('dd/MM/yyyy').format(habit.alarmTime!),
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () {
                   habitNotifier.markHabitAsComplete(habit.id);
